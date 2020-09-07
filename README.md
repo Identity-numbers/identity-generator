@@ -15,6 +15,7 @@ http://www.linusjarbo.com/IdentityNumber/index.html
 
 # Feature Requests
 -save text to file
+
 -verbose toggle
 
 # Updates, log
