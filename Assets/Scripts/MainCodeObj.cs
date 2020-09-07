@@ -14,6 +14,10 @@ public class MainCodeObj : MonoBehaviour
     public Toggle toggle;
     public Toggle toggle_removeLastDigit;
     public Toggle toggle_addFirstDidgit;
+    public Toggle toggle_recursive;
+    public InputField recursive_steps;
+
+    public string currentIdentity = "not set yet";
 
     /* TODO 
     Remove last digit in identity number
@@ -29,17 +33,50 @@ public class MainCodeObj : MonoBehaviour
     //called when button pressed
     public void CalculateFoldIdentity()
     {
-        //get text
+        //get text first time
         inputText = GetInputFieldText();
+        //cut up text in linebreaks
+        string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
         //text ok, clear output
         clearOutputText();
 
-        //cut up text in linebreaks
-        string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        //if lines are greater than one and recursive method, return
+        if (toggle_recursive.isOn && lines.Length > 1)
+        {
+            addTextToOutput("Recursive method only works on single line of input");
+            return;
+        }
+        else if (toggle_recursive.isOn)
+        {
+            //integers from inputfield
+            int recursive_int = int.Parse(recursive_steps.text);
+
+            for (int z = 0; z < recursive_int; z++)
+            {
+                if (z == 0)
+                {
+                    GetFoldIdentity(lines);
+                }
+                else
+                {
+                    string[] currID = currentIdentity.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                    GetFoldIdentity(currID);
+                }
+            }
+        }
+        else
+        {
+            GetFoldIdentity(lines);
+        }
+    }
+
+    private void GetFoldIdentity(string[] lines)
+    {
 
         for (int j = 0; j < lines.Length; j++)
         {
+
             //cut up string in two halfs and fold
             string s = lines[j];
             char firstDigit = s[0];
@@ -53,7 +90,7 @@ public class MainCodeObj : MonoBehaviour
             {
                 if (i == 0)
                 {
-                    addTextToOutput("\n" + "this is input: " + s);
+                    addTextToOutput("\n" + "Input: " + s);
                 }
 
                 if (toggle.isOn)
@@ -79,7 +116,8 @@ public class MainCodeObj : MonoBehaviour
                 foldedIdentity = firstDigit + foldedIdentity;
             }
 
-            addTextToOutput("Folded identity: " + foldedIdentity);
+            addTextToOutput("Fold : " + foldedIdentity);
+            currentIdentity = foldedIdentity;
         }
     }
 
