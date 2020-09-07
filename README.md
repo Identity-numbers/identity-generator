@@ -11,6 +11,8 @@ The generator is programmed in C# in Unity3d, version 2019.3.7f1
 # Builds:
 Builds can be found here for the time being:
 
+most recent build: Mån  7 Sep 2020 22:58:39 CEST
+
 http://www.linusjarbo.com/IdentityNumber/index.html
 
 # Feature Requests
@@ -19,3 +21,5 @@ http://www.linusjarbo.com/IdentityNumber/index.html
 -verbose toggle
 
 # Updates, log
+version 1.2
+- Added recursive identity calculation at set number of iterations
