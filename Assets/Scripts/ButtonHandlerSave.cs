@@ -9,7 +9,6 @@ public class ButtonHandlerSave : MonoBehaviour
 
     public void onButtonPressed()
     {
-        //Debug.Log("Hello");
         mainCodeObj.copyToMemory();
     }
 }

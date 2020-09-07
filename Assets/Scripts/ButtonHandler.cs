@@ -9,7 +9,6 @@ public class ButtonHandler : MonoBehaviour
 
     public void onButtonPressed()
     {
-        //Debug.Log("Hello");
         mainCodeObj.CalculateFoldIdentity();
     }
 }

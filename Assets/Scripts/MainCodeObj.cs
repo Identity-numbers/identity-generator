@@ -43,7 +43,7 @@ public class MainCodeObj : MonoBehaviour
             //cut up string in two halfs and fold
             string s = lines[j];
             char firstDigit = s[0];
-            Debug.Log(firstDigit);
+            //Debug.Log(firstDigit);
             //validate string
             s = validateText(s);
 
@@ -113,7 +113,7 @@ public class MainCodeObj : MonoBehaviour
 
     public void copyToMemory()
     {
-        textOutput.text.CopyToClipboard();
+        GUIUtility.systemCopyBuffer = textOutput.text;
     }
 
     private string GetInputFieldText()
