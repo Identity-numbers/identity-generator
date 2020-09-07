@@ -14,5 +14,7 @@ Builds can be found here for the time being:
 http://www.linusjarbo.com/IdentityNumber/index.html
 
 # Feature Requests
+-save text to file
+-verbose toggle
 
 # Updates, log
