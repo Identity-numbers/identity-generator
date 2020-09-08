@@ -19,6 +19,8 @@ public class MainCodeObj : MonoBehaviour
 
     public string currentIdentity = "not set yet";
 
+    public GameObject infoscreen;
+
     /* TODO 
     Remove last digit in identity number
     check if copy to memory works in WebGL?
@@ -195,5 +197,10 @@ public class MainCodeObj : MonoBehaviour
         char[] charArray = s.ToCharArray();
         Array.Reverse(charArray);
         return new string(charArray);
+    }
+
+    public void toggleInfoScreen(bool isVisible)
+    {
+        infoscreen.SetActive(isVisible);
     }
 }
