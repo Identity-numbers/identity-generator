@@ -10,22 +10,13 @@ public class MainCodeObj : MonoBehaviour
     public InputField textInput;
     public InputField textOutput;
     public string inputText;
-
     public Toggle toggle;
     public Toggle toggle_removeLastDigit;
     public Toggle toggle_addFirstDidgit;
     public Toggle toggle_recursive;
     public InputField recursive_steps;
-
     public string currentIdentity = "not set yet";
-
     public GameObject infoscreen;
-
-    /* TODO 
-    Remove last digit in identity number
-    check if copy to memory works in WebGL?
-    checkbox readd first digit to identitynumber
-    */
 
     private void Start()
     {
@@ -94,6 +85,7 @@ public class MainCodeObj : MonoBehaviour
                 {
                     addTextToOutput("\n" + "Input: " + s);
                 }
+                
 
                 if (toggle.isOn)
                 {
