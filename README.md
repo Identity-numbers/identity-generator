@@ -11,7 +11,7 @@ The generator is programmed in C# in Unity3d, version 2019.3.7f1
 # Builds:
 Builds can be found here:
 
-most recent build: Mån 7 Sep 2020 22:58:39 CEST
+most recent build: Tis  8 Sep 2020 11:45:58 CEST
 
 http://www.linusjarbo.com/IdentityNumber/index.html
 
