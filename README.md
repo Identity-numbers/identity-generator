@@ -11,7 +11,7 @@ In this program it is possible to generate a single identity number for an integ
 The single identity number is found vertically as a repeating pattern in the repeated folding
 of a sequence of integers. It repeats itself throughout the folding.
 
-See the blue rectangle in the image below.
+See the blue rectangle in the image below. Also note how the pattern repeats itself for every column but with another offset.
 
 <a href="url"><img src="github-img/IdentityNumber.png" width="650" ></a>
 
