@@ -16,6 +16,7 @@ See the blue rectangle in the image below.
 <a href="url"><img src="github-img/IdentityNumber.png" width="650" ></a>
 
 A single fold takes the integer, viewed as a positional container (updatable value) from the lowest contrasting value, to it's highest.
+By folding the sequence repeatably it streches it from a minimum contrast to a maximum at every fold.
 
 <a href="url"><img src="github-img/maxContrast.png" width="650" ></a>
 
