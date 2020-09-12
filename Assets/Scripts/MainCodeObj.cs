@@ -28,6 +28,7 @@ public class MainCodeObj : MonoBehaviour
     {
         //get text first time
         inputText = GetInputFieldText();
+        
         //cut up text in linebreaks
         string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
