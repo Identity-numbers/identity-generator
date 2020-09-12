@@ -18,9 +18,12 @@ public class MainCodeObj : MonoBehaviour
     public string currentIdentity = "not set yet";
     public GameObject infoscreen;
 
+    //new vars
+    List<int> inputList = new List<int>();
+
     private void Start()
     {
-        textInput.text = "1234";
+        textInput.text = "1,2,3,4";
     }
 
     //called when button pressed
@@ -28,7 +31,35 @@ public class MainCodeObj : MonoBehaviour
     {
         //get text first time
         inputText = GetInputFieldText();
-        
+        string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
+
+        clearOutputText();
+
+        //add input to List
+        for (int i = 0; i < lines.Length; i++)
+        {
+            inputList.Add(int.Parse(lines[i]));
+        }
+
+        List<int> tempInputList = new List<int>();
+        tempInputList = inputList;
+
+        List<int> idNumber_list = new List<int>();
+        for (int i = 0; i < inputList.Count; i++)
+        {
+            idNumber_list.Add(tempInputList[1]);
+            //recursive
+            tempInputList = FoldListSequence(tempInputList);
+        }
+
+        /*
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    Debug.Log(inputList[i].ToString());
+                }
+        */
+
+        /*
         //cut up text in linebreaks
         string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
@@ -63,59 +94,93 @@ public class MainCodeObj : MonoBehaviour
         {
             GetFoldIdentity(lines);
         }
+        */
     }
 
-    private void GetFoldIdentity(string[] lines)
-    {
 
-        for (int j = 0; j < lines.Length; j++)
+    private List<int> FoldListSequence(List<int> seqList)
+    {
+        List<int> tempList = new List<int>();
+        tempList = seqList;
+
+        //fold templist
+        List<int> firstHalf = tempList.GetRange(0, tempList.Count / 2);
+        List<int> secondHalf = tempList.GetRange(tempList.Count / 2, tempList.Count);
+
+        //reverse second Half
+        secondHalf.Reverse();
+
+        List<int> returnList = new List<int>();
+
+        for (int i = 0; i < seqList.Count; i++)
+        {
+            if (i % 2 == 0)
+            {
+                returnList.Add(secondHalf[i]);
+            }
+            else
+            {
+                returnList.Add(secondHalf[i]);
+            }
+        }
+
+        return returnList;
+    }
+    /*
+        private void GetFoldIdentity(string[] lines)
         {
 
-            //cut up string in two halfs and fold
-            string s = lines[j];
-            char firstDigit = s[0];
-            //Debug.Log(firstDigit);
-            //validate string
-            s = validateText(s);
-
-            string foldedIdentity = "";
-            int strLength = s.Length; //need length twice
-            for (int i = 0; i < strLength; i++)
+            for (int j = 0; j < lines.Length; j++)
             {
-                if (i == 0)
+
+                //cut up string in two halfs and fold
+                string s = lines[j];
+                char firstDigit = s[0];
+                //Debug.Log(firstDigit);
+                //validate string
+                s = validateText(s);
+
+                string foldedIdentity = "";
+                int strLength = s.Length; //need length twice
+                for (int i = 0; i < strLength; i++)
                 {
-                    addTextToOutput("\n" + "Input: " + s);
-                }
-                
+                    if (i == 0)
+                    {
+                        addTextToOutput("\n" + "Input: " + s);
+                    }
 
-                if (toggle.isOn)
+
+                    if (toggle.isOn)
+                    {
+                        addTextToOutput(s);
+                    }
+
+                    if (strLength >= 0)
+                    {
+                        foldedIdentity += s.ToString()[1];
+                    }
+
+                    s = FoldSequence(s, strLength);
+                }
+
+                if (toggle_removeLastDigit.isOn)
                 {
-                    addTextToOutput(s);
+                    foldedIdentity = foldedIdentity.Remove(foldedIdentity.Length - 1);
                 }
 
-                if (strLength >= 0)
+                if (toggle_addFirstDidgit.isOn)
                 {
-                    foldedIdentity += s.ToString()[1];
+                    foldedIdentity = firstDigit + foldedIdentity;
                 }
 
-                s = FoldSequence(s, strLength);
+                addTextToOutput("Fold : " + foldedIdentity);
+                currentIdentity = foldedIdentity;
             }
-
-            if (toggle_removeLastDigit.isOn)
-            {
-                foldedIdentity = foldedIdentity.Remove(foldedIdentity.Length - 1);
-            }
-
-            if (toggle_addFirstDidgit.isOn)
-            {
-                foldedIdentity = firstDigit + foldedIdentity;
-            }
-
-            addTextToOutput("Fold : " + foldedIdentity);
-            currentIdentity = foldedIdentity;
         }
-    }
+        */
 
+
+    /*
     private string FoldSequence(string s, int l)
     {
         //string length
@@ -143,6 +208,7 @@ public class MainCodeObj : MonoBehaviour
         }
         return mixedString;
     }
+    */
 
     public void copyToMemory()
     {
@@ -155,25 +221,27 @@ public class MainCodeObj : MonoBehaviour
         return (textInput.text);
     }
 
-    private string validateText(string s)
-    {
-        if (s.Length % 2 == 0)
+    /*
+        private string validateText(string s)
         {
-            //do nothing
+            if (s.Length % 2 == 0)
+            {
+                //do nothing
+            }
+            else if (s.Length == 0)
+            {
+                //string is empty do something...
+                s = "::";
+            }
+            else
+            {
+                addTextToOutput("Size not even, trimming end from: " + s);
+                s = s.Remove(s.Length - 1);
+                addTextToOutput("->                            to: " + s);
+            }
+            return (s);
         }
-        else if (s.Length == 0)
-        {
-            //string is empty do something...
-            s = "::";
-        }
-        else
-        {
-            addTextToOutput("Size not even, trimming end from: " + s);
-            s = s.Remove(s.Length - 1);
-            addTextToOutput("->                            to: " + s);
-        }
-        return (s);
-    }
+    */
 
     private void addTextToOutput(string s)
     {
@@ -185,15 +253,19 @@ public class MainCodeObj : MonoBehaviour
         textOutput.text = "";
     }
 
-    public static string Reverse(string s)
-    {
-        char[] charArray = s.ToCharArray();
-        Array.Reverse(charArray);
-        return new string(charArray);
-    }
+    /*
+        public static string Reverse(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+    */
 
-    public void toggleInfoScreen(bool isVisible)
-    {
-        infoscreen.SetActive(isVisible);
-    }
+    /*
+        public void toggleInfoScreen(bool isVisible)
+        {
+            //infoscreen.SetActive(isVisible);
+        }
+    */
 }
