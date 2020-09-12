@@ -25,11 +25,14 @@ public class MainCodeObj : MonoBehaviour
     //called when button pressed
     public void CalculateFoldIdentity()
     {
+        clearOutputText();
+
         //get text first time
         inputText = GetInputFieldText();
-        string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
 
-        clearOutputText();
+        addTextToOutput("Sequence: {" + inputText + "}");
+
+        string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
 
         //emtpy list if items added previously
         inputList.Clear();
@@ -39,11 +42,12 @@ public class MainCodeObj : MonoBehaviour
             inputList.Add(int.Parse(lines[i]));
         }
 
+        addTextToOutput("Burrito Matrix of n = " + inputList.Count);
+        
         List<int> tempInputList = new List<int>(inputList);
         List<int> idNumber_list = new List<int>();
 
         //input number is member of first row
-        idNumber_list.Add(inputList[1]);
         printOutListToOutput(inputList);
 
         for (int i = 0; i < inputList.Count-1; i++)
@@ -54,6 +58,20 @@ public class MainCodeObj : MonoBehaviour
 
             printOutListToOutput(tempInputList);
         }
+        idNumber_list.Add(inputList[1]);
+
+        //the identity Number
+        textOutput.text += "Identity Number: {";
+        printOutListToOutput(idNumber_list);
+        textOutput.text += "}";
+
+        //the identity sum
+        int sum = 0;
+        for (int j = 0; j < idNumber_list.Count; j++)
+        {
+            sum +=idNumber_list[j];
+        }
+        addTextToOutput("The sum of second column: " + sum);
     }
 
     public void printOutListToOutput(List<int> pList)
@@ -70,7 +88,7 @@ public class MainCodeObj : MonoBehaviour
                 pString += pList[i].ToString();
             }
         }
-        addTextToOutput(pString + "\n");
+        addTextToOutput(pString);
     }
 
     private List<int> FoldListSequence(List<int> seqList)
