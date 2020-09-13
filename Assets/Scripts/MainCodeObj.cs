@@ -132,7 +132,7 @@ public class MainCodeObj : MonoBehaviour
 
             printOutListToOutput(tempInputList);
         }
-        idNumber_list.Add(inputList[1]);
+        idNumber_list.Add(tempInputList[1]);
 
         //the identity Number
         if (toggle_verbose.isOn)
