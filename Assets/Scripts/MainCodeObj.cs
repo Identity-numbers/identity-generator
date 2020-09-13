@@ -9,28 +9,99 @@ public class MainCodeObj : MonoBehaviour
 {
     public InputField textInput;
     public InputField textOutput;
+    public InputField inputField_recursiveSteps;
     public string inputText;
-    public Toggle toggle;
+    public Toggle toggle_verbose;
     public string currentIdentity = "not set yet";
     public GameObject infoscreen;
-
-    //new vars
     List<int> inputList = new List<int>();
 
     private void Start()
     {
-        textInput.text = "1,2,3,4";
+        textInput.text = "";
+        inputField_recursiveSteps.text = "8";
     }
 
-    //called when button pressed
-    public void CalculateFoldIdentity()
+    //called by button
+    public void recursiveOutput()
     {
-        clearOutputText();
+        //set limit to users
+        int limit = 100;
+        //check recursive values
+        int steps = int.Parse(inputField_recursiveSteps.text);
+
+        //check recursive steps, max output 100 
+        if (inputField_recursiveSteps.text == "" && steps > limit && steps % 2 != 0)
+        {
+            addTextToOutput("recursive number empty, uneven or larger than limit = " + limit);
+            return;
+        }
+
+        textInput.text = "1,2";
+        CalculateFoldIdentity(false);
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput(" ");
+        }
+        else
+        {
+            addTextToOutput(",",false);
+        }
+
+        if (steps > 2)
+        {
+            //textInput.text += ",";
+        }
+        int count = 2;
+        //generate text for start values, starts at two and 
+        for (int i = 2; i < steps; i += 2)
+        {
+            textInput.text += ",";
+
+            count += 1;
+            textInput.text += count.ToString() + ",";
+
+            count += 1;
+
+            Debug.Log("i: " + i + " steps: " + steps);
+            if (i < steps - 1)
+            {
+                textInput.text += count.ToString();
+            }
+            else
+            {
+                textInput.text += count.ToString() + ",";
+            }
+            Debug.Log("Calc fold");
+            CalculateFoldIdentity(false);
+
+            if (toggle_verbose.isOn)
+            {
+                addTextToOutput(" ");
+            }
+            else
+            {
+                addTextToOutput(",", false);
+            }
+        }
+    }
+
+    //called by button, and by recursive steps
+    public void CalculateFoldIdentity(bool clearOutput = true)
+    {
+        //for recursive to bypass
+        if (clearOutput)
+        {
+            clearOutputText();
+        }
 
         //get text first time
         inputText = GetInputFieldText();
 
-        addTextToOutput("Sequence: {" + inputText + "}");
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput("Sequence: {" + inputText + "}");
+        }
 
         string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
 
@@ -42,15 +113,18 @@ public class MainCodeObj : MonoBehaviour
             inputList.Add(int.Parse(lines[i]));
         }
 
-        addTextToOutput("Burrito Matrix of n = " + inputList.Count);
-        
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput("Burrito Matrix of n = " + inputList.Count);
+        }
+
         List<int> tempInputList = new List<int>(inputList);
         List<int> idNumber_list = new List<int>();
 
         //input number is member of first row
         printOutListToOutput(inputList);
 
-        for (int i = 0; i < inputList.Count-1; i++)
+        for (int i = 0; i < inputList.Count - 1; i++)
         {
             idNumber_list.Add(tempInputList[1]);
             //recursive
@@ -61,21 +135,36 @@ public class MainCodeObj : MonoBehaviour
         idNumber_list.Add(inputList[1]);
 
         //the identity Number
-        textOutput.text += "Identity Number: {";
-        printOutListToOutput(idNumber_list);
-        textOutput.text += "}";
+        if (toggle_verbose.isOn)
+        {
+            textOutput.text += "Identity Number: {";
+            printOutListToOutput(idNumber_list, false);
+            textOutput.text += "}\n";
+        }
 
         //the identity sum
         int sum = 0;
         for (int j = 0; j < idNumber_list.Count; j++)
         {
-            sum +=idNumber_list[j];
+            sum += idNumber_list[j];
         }
-        addTextToOutput("The sum of second column: " + sum);
+
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput("The sum of second column: " + sum);
+        }
+        else
+        {
+            addTextToOutput(sum.ToString(), false);
+        }
     }
 
-    public void printOutListToOutput(List<int> pList)
+    public void printOutListToOutput(List<int> pList, bool noLinebreak = true)
     {
+        if (!toggle_verbose.isOn)
+        {
+            return;
+        }
         string pString = "";
         for (int i = 0; i < pList.Count; i++)
         {
@@ -88,7 +177,15 @@ public class MainCodeObj : MonoBehaviour
                 pString += pList[i].ToString();
             }
         }
-        addTextToOutput(pString);
+        if (noLinebreak)
+        {
+            addTextToOutput(pString);
+        }
+        else
+        {
+            addTextToOutput(pString, false);
+        }
+
     }
 
     private List<int> FoldListSequence(List<int> seqList)
@@ -122,23 +219,19 @@ public class MainCodeObj : MonoBehaviour
         return returnList;
     }
 
-    public void copyToMemory()
+    public void copyToMemory() { GUIUtility.systemCopyBuffer = textOutput.text; }
+    private string GetInputFieldText() { return (textInput.text); }
+    private void addTextToOutput(string s, bool linebreak = true)
     {
-        GUIUtility.systemCopyBuffer = textOutput.text;
-    }
+        if (linebreak)
+        {
 
-    private string GetInputFieldText()
-    {
-        return (textInput.text);
+            textOutput.text += s + "\n";
+        }
+        else
+        {
+            textOutput.text += s;
+        }
     }
-
-    private void addTextToOutput(string s)
-    {
-        textOutput.text += s + "\n";
-    }
-
-    private void clearOutputText()
-    {
-        textOutput.text = "";
-    }
+    private void clearOutputText() { textOutput.text = ""; }
 }
