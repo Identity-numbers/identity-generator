@@ -45,7 +45,7 @@ public class MainCodeObj : MonoBehaviour
         }
         else
         {
-            addTextToOutput(",",false);
+            addTextToOutput(",", false);
         }
 
         if (steps > 2)
@@ -149,13 +149,24 @@ public class MainCodeObj : MonoBehaviour
             sum += idNumber_list[j];
         }
 
+        int travelValue = 0;
+        if (idNumber_list.Count > 2)
+        {
+            for (int i = 0; i < idNumber_list.Count - 1; i++)
+            {
+                travelValue += Mathf.Abs(idNumber_list[i] - idNumber_list[i + 1]);
+            }
+        }
+
         if (toggle_verbose.isOn)
         {
-            addTextToOutput("The sum of second column: " + sum);
+            //addTextToOutput("The sum of second column: " + sum);
+            addTextToOutput("The abs sum of travel through second column: " + travelValue);
         }
         else
         {
-            addTextToOutput(sum.ToString(), false);
+            //addTextToOutput(sum.ToString(), false);
+            addTextToOutput(travelValue.ToString(),false);
         }
     }
 
