@@ -27,12 +27,15 @@ public class MainCodeObj : MonoBehaviour
     {
         //set limit to users
         int limit = 100;
+
+        text txt = inputField_recursiveSteps.text;
         //check recursive values
-        int steps = int.Parse(inputField_recursiveSteps.text);
+        int steps = int.Parse(txt);
 
         //check recursive steps, max output 100 
-        if (inputField_recursiveSteps.text == "" && steps > limit && steps % 2 != 0)
+        if (txt == "" && steps > limit && steps % 2 != 0)
         {
+            //number doesn't check
             addTextToOutput("recursive number empty, uneven or larger than limit = " + limit);
             return;
         }
@@ -64,25 +67,12 @@ public class MainCodeObj : MonoBehaviour
             count += 1;
 
             Debug.Log("i: " + i + " steps: " + steps);
-            if (i < steps - 1)
-            {
-                textInput.text += count.ToString();
-            }
-            else
-            {
-                textInput.text += count.ToString() + ",";
-            }
-            Debug.Log("Calc fold");
+
+            if (i < steps - 1) { textInput.text += count.ToString(); } else { textInput.text += count.ToString() + ","; }
+
             CalculateFoldIdentity(false);
 
-            if (toggle_verbose.isOn)
-            {
-                addTextToOutput(" ");
-            }
-            else
-            {
-                addTextToOutput(",", false);
-            }
+            if (toggle_verbose.isOn) { addTextToOutput(" "); } else { addTextToOutput(",", false); }
         }
     }
 
@@ -166,7 +156,7 @@ public class MainCodeObj : MonoBehaviour
         else
         {
             //addTextToOutput(sum.ToString(), false);
-            addTextToOutput(travelValue.ToString(),false);
+            addTextToOutput(travelValue.ToString(), false);
         }
     }
 
