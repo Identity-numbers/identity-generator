@@ -9,190 +9,230 @@ public class MainCodeObj : MonoBehaviour
 {
     public InputField textInput;
     public InputField textOutput;
+    public InputField inputField_recursiveSteps;
     public string inputText;
-    public Toggle toggle;
-    public Toggle toggle_removeLastDigit;
-    public Toggle toggle_addFirstDidgit;
-    public Toggle toggle_recursive;
-    public InputField recursive_steps;
+    public Toggle toggle_verbose;
     public string currentIdentity = "not set yet";
     public GameObject infoscreen;
+    List<int> inputList = new List<int>();
 
     private void Start()
     {
-        textInput.text = "1234";
+        textInput.text = "";
+        inputField_recursiveSteps.text = "8";
     }
 
-    //called when button pressed
-    public void CalculateFoldIdentity()
+    //called by button
+    public void recursiveOutput()
     {
-        //get text first time
-        inputText = GetInputFieldText();
-        //cut up text in linebreaks
-        string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        //set limit to users
+        int limit = 100;
 
-        //text ok, clear output
-        clearOutputText();
+        text txt = inputField_recursiveSteps.text;
+        //check recursive values
+        int steps = int.Parse(txt);
 
-        //if lines are greater than one and recursive method, return
-        if (toggle_recursive.isOn && lines.Length > 1)
+        //check recursive steps, max output 100 
+        if (txt == "" && steps > limit && steps % 2 != 0)
         {
-            addTextToOutput("Recursive method only works on single line of input");
+            //number doesn't check
+            addTextToOutput("recursive number empty, uneven or larger than limit = " + limit);
             return;
         }
-        else if (toggle_recursive.isOn)
-        {
-            //integers from inputfield
-            int recursive_int = int.Parse(recursive_steps.text);
 
-            for (int z = 0; z < recursive_int; z++)
-            {
-                if (z == 0)
-                {
-                    GetFoldIdentity(lines);
-                }
-                else
-                {
-                    string[] currID = currentIdentity.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-                    GetFoldIdentity(currID);
-                }
-            }
+        textInput.text = "1,2";
+        CalculateFoldIdentity(false);
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput(" ");
         }
         else
         {
-            GetFoldIdentity(lines);
+            addTextToOutput(",", false);
+        }
+
+        if (steps > 2)
+        {
+            //textInput.text += ",";
+        }
+        int count = 2;
+        //generate text for start values, starts at two and 
+        for (int i = 2; i < steps; i += 2)
+        {
+            textInput.text += ",";
+
+            count += 1;
+            textInput.text += count.ToString() + ",";
+
+            count += 1;
+
+            Debug.Log("i: " + i + " steps: " + steps);
+
+            if (i < steps - 1) { textInput.text += count.ToString(); } else { textInput.text += count.ToString() + ","; }
+
+            CalculateFoldIdentity(false);
+
+            if (toggle_verbose.isOn) { addTextToOutput(" "); } else { addTextToOutput(",", false); }
         }
     }
 
-    private void GetFoldIdentity(string[] lines)
+    //called by button, and by recursive steps
+    public void CalculateFoldIdentity(bool clearOutput = true)
     {
-
-        for (int j = 0; j < lines.Length; j++)
+        //for recursive to bypass
+        if (clearOutput)
         {
+            clearOutputText();
+        }
 
-            //cut up string in two halfs and fold
-            string s = lines[j];
-            char firstDigit = s[0];
-            //Debug.Log(firstDigit);
-            //validate string
-            s = validateText(s);
+        //get text first time
+        inputText = GetInputFieldText();
 
-            string foldedIdentity = "";
-            int strLength = s.Length; //need length twice
-            for (int i = 0; i < strLength; i++)
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput("Sequence: {" + inputText + "}");
+        }
+
+        string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
+
+        //emtpy list if items added previously
+        inputList.Clear();
+        //add input to List
+        for (int i = 0; i < lines.Length; i++)
+        {
+            inputList.Add(int.Parse(lines[i]));
+        }
+
+        if (toggle_verbose.isOn)
+        {
+            addTextToOutput("Burrito Matrix of n = " + inputList.Count);
+        }
+
+        List<int> tempInputList = new List<int>(inputList);
+        List<int> idNumber_list = new List<int>();
+
+        //input number is member of first row
+        printOutListToOutput(inputList);
+
+        for (int i = 0; i < inputList.Count - 1; i++)
+        {
+            idNumber_list.Add(tempInputList[1]);
+            //recursive
+            tempInputList = FoldListSequence(tempInputList);
+
+            printOutListToOutput(tempInputList);
+        }
+        idNumber_list.Add(tempInputList[1]);
+
+        //the identity Number
+        if (toggle_verbose.isOn)
+        {
+            textOutput.text += "Identity Number: {";
+            printOutListToOutput(idNumber_list, false);
+            textOutput.text += "}\n";
+        }
+
+        //the identity sum
+        int sum = 0;
+        for (int j = 0; j < idNumber_list.Count; j++)
+        {
+            sum += idNumber_list[j];
+        }
+
+        int travelValue = 0;
+        if (idNumber_list.Count > 2)
+        {
+            for (int i = 0; i < idNumber_list.Count - 1; i++)
             {
-                if (i == 0)
-                {
-                    addTextToOutput("\n" + "Input: " + s);
-                }
-                
-
-                if (toggle.isOn)
-                {
-                    addTextToOutput(s);
-                }
-
-                if (strLength >= 0)
-                {
-                    foldedIdentity += s.ToString()[1];
-                }
-
-                s = FoldSequence(s, strLength);
+                travelValue += Mathf.Abs(idNumber_list[i] - idNumber_list[i + 1]);
             }
-
-            if (toggle_removeLastDigit.isOn)
-            {
-                foldedIdentity = foldedIdentity.Remove(foldedIdentity.Length - 1);
-            }
-
-            if (toggle_addFirstDidgit.isOn)
-            {
-                foldedIdentity = firstDigit + foldedIdentity;
-            }
-
-            addTextToOutput("Fold : " + foldedIdentity);
-            currentIdentity = foldedIdentity;
         }
-    }
 
-    private string FoldSequence(string s, int l)
-    {
-        //string length
-        int strLength = l;
-
-        //mixed string
-        string mixedString = "";
-        char[] mixedCharArray = new char[strLength];
-
-        //take string and divide in two substrings
-        string firstPart = s.Substring(0, strLength / 2);
-        string secondPart = s.Substring(strLength / 2, strLength / 2);
-
-        //reverse second part
-        secondPart = Reverse(secondPart);
-
-        char[] firstPartCharArr = firstPart.ToCharArray();
-        char[] secondPartCharArr = secondPart.ToCharArray();
-
-        //Mix arrays into new string
-        for (int i = 0; i < strLength / 2; i++)
+        if (toggle_verbose.isOn)
         {
-            mixedString += firstPartCharArr[i];
-            mixedString += secondPartCharArr[i];
-        }
-        return mixedString;
-    }
-
-    public void copyToMemory()
-    {
-        GUIUtility.systemCopyBuffer = textOutput.text;
-    }
-
-    private string GetInputFieldText()
-    {
-        //Debug.Log(textInput.text);
-        return (textInput.text);
-    }
-
-    private string validateText(string s)
-    {
-        if (s.Length % 2 == 0)
-        {
-            //do nothing
-        }
-        else if (s.Length == 0)
-        {
-            //string is empty do something...
-            s = "::";
+            //addTextToOutput("The sum of second column: " + sum);
+            addTextToOutput("The abs sum of travel through second column: " + travelValue);
         }
         else
         {
-            addTextToOutput("Size not even, trimming end from: " + s);
-            s = s.Remove(s.Length - 1);
-            addTextToOutput("->                            to: " + s);
+            //addTextToOutput(sum.ToString(), false);
+            addTextToOutput(travelValue.ToString(), false);
         }
-        return (s);
     }
 
-    private void addTextToOutput(string s)
+    public void printOutListToOutput(List<int> pList, bool noLinebreak = true)
     {
-        textOutput.text += s + "\n";
+        if (!toggle_verbose.isOn)
+        {
+            return;
+        }
+        string pString = "";
+        for (int i = 0; i < pList.Count; i++)
+        {
+            if (i != pList.Count - 1)
+            {
+                pString += pList[i].ToString() + ",";
+            }
+            else
+            {
+                pString += pList[i].ToString();
+            }
+        }
+        if (noLinebreak)
+        {
+            addTextToOutput(pString);
+        }
+        else
+        {
+            addTextToOutput(pString, false);
+        }
+
     }
 
-    private void clearOutputText()
+    private List<int> FoldListSequence(List<int> seqList)
     {
-        textOutput.text = "";
+        List<int> tempList = new List<int>(seqList);
+
+        //fold templist
+        List<int> firstHalf = tempList.GetRange(0, (tempList.Count / 2));
+        List<int> secondHalf = tempList.GetRange((tempList.Count / 2), tempList.Count / 2);
+
+        //reverse second Half
+        secondHalf.Reverse();
+
+        List<int> returnList = new List<int>();
+
+        int countfirst = 0;
+        int countsecond = 0;
+        for (int i = 0; i < seqList.Count; i++)
+        {
+            if (i % 2 == 0)
+            {
+                returnList.Add(firstHalf[0]);
+                firstHalf.RemoveAt(0);
+            }
+            else
+            {
+                returnList.Add(secondHalf[0]);
+                secondHalf.RemoveAt(0);
+            }
+        }
+        return returnList;
     }
 
-    public static string Reverse(string s)
+    public void copyToMemory() { GUIUtility.systemCopyBuffer = textOutput.text; }
+    private string GetInputFieldText() { return (textInput.text); }
+    private void addTextToOutput(string s, bool linebreak = true)
     {
-        char[] charArray = s.ToCharArray();
-        Array.Reverse(charArray);
-        return new string(charArray);
-    }
+        if (linebreak)
+        {
 
-    public void toggleInfoScreen(bool isVisible)
-    {
-        infoscreen.SetActive(isVisible);
+            textOutput.text += s + "\n";
+        }
+        else
+        {
+            textOutput.text += s;
+        }
     }
+    private void clearOutputText() { textOutput.text = ""; }
 }
