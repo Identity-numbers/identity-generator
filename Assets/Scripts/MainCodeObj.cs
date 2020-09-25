@@ -16,14 +16,15 @@ public class MainCodeObj : MonoBehaviour
     public InputField text_Output;
     public InputField inputField_recursiveSteps_In;
     public InputField inputField_recursiveSteps_Out;
-    [HideInInspector]    
+    [HideInInspector]
     public string input_TextString;
     public Toggle toggle_Verbose;
     List<int> input_List = new List<int>();
 
     private void Start()
     {
-        text_Input.text = "";
+        text_Input.text = "1,2,3,4";
+        inputField_recursiveSteps_In.text = "2";
         inputField_recursiveSteps_Out.text = "8";
     }
 
@@ -47,11 +48,16 @@ public class MainCodeObj : MonoBehaviour
 
         int stepsIn = int.Parse(txtIn);
         int stepsOut = int.Parse(txtOut);
-        
+
         if (stepsIn % 2 != 0 || stepsOut % 2 != 0)
         {
             addTextToOutput("recursive number in field In or Out not EVEN");
             return;
+        }
+        else if (stepsIn == 0)
+        {
+            stepsIn = 2;
+            inputField_recursiveSteps_In.text = stepsIn.ToString();
         }
         else if (stepsIn > stepsOut)
         {
@@ -88,7 +94,7 @@ public class MainCodeObj : MonoBehaviour
 
         int count = stepsIn;
         //generate text for start values, starts at two and 
-        for (int i = 2; i < steps; i += 2)
+        for (int i = stepsIn; i < stepsOut; i += 2)
         {
             text_Input.text += ",";
 
@@ -148,7 +154,6 @@ public class MainCodeObj : MonoBehaviour
             idNumber_list.Add(tempInputList[1]);
             //recursive
             tempInputList = FoldListSequence(tempInputList);
-
             printOutListToOutput(tempInputList);
         }
         idNumber_list.Add(tempInputList[1]);
@@ -215,7 +220,6 @@ public class MainCodeObj : MonoBehaviour
         {
             addTextToOutput(pString, false);
         }
-
     }
 
     private List<int> FoldListSequence(List<int> seqList)
@@ -230,9 +234,6 @@ public class MainCodeObj : MonoBehaviour
         secondHalf.Reverse();
 
         List<int> returnList = new List<int>();
-
-        int countfirst = 0;
-        int countsecond = 0;
         for (int i = 0; i < seqList.Count; i++)
         {
             if (i % 2 == 0)
@@ -255,7 +256,6 @@ public class MainCodeObj : MonoBehaviour
     {
         if (linebreak)
         {
-
             text_Output.text += s + "\n";
         }
         else
