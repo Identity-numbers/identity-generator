@@ -5,14 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-<<<<<<< Updated upstream
-=======
 /*
 TODO: fix graphics registration point, not working now...
 TODO: validate input for "get folded identity"
 */
 
->>>>>>> Stashed changes
 public class MainCodeObj : MonoBehaviour
 {
     public InputField text_Input;
@@ -33,20 +30,6 @@ public class MainCodeObj : MonoBehaviour
     //called by button
     public void recursiveOutput()
     {
-<<<<<<< Updated upstream
-        //set limit to users
-        int limit = 100;
-
-        string txt = inputField_recursiveSteps_Out.text;
-        //check recursive values
-        int steps = int.Parse(txt);
-
-        //check recursive steps, max output 100 
-        if (txt == "" && steps > limit && steps % 2 != 0)
-        {
-            //number doesn't check
-            addTextToOutput("recursive number empty, uneven or larger than limit = " + limit);
-=======
         clearOutputText();
 
         //set limit to users
@@ -78,7 +61,6 @@ public class MainCodeObj : MonoBehaviour
         else if (stepsIn > limit || stepsOut > limit)
         {
             addTextToOutput("recursive number In or Out larger than LIMIT = " + limit);
->>>>>>> Stashed changes
             return;
         }
 
@@ -104,15 +86,7 @@ public class MainCodeObj : MonoBehaviour
             addTextToOutput(",", false);
         }
 
-<<<<<<< Updated upstream
-        if (steps > 2)
-        {
-            //textInput.text += ",";
-        }
-        int count = 2;
-=======
         int count = stepsIn;
->>>>>>> Stashed changes
         //generate text for start values, starts at two and 
         for (int i = 2; i < steps; i += 2)
         {
@@ -123,13 +97,7 @@ public class MainCodeObj : MonoBehaviour
 
             count += 1;
 
-<<<<<<< Updated upstream
-            Debug.Log("i: " + i + " steps: " + steps);
-
-            if (i < steps - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
-=======
             if (i < stepsOut - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
->>>>>>> Stashed changes
 
             CalculateFoldIdentity(false);
 
