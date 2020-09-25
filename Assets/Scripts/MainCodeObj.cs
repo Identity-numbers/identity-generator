@@ -7,19 +7,19 @@ using UnityEngine.UI;
 
 public class MainCodeObj : MonoBehaviour
 {
-    public InputField textInput;
-    public InputField textOutput;
-    public InputField inputField_recursiveSteps;
-    public string inputText;
-    public Toggle toggle_verbose;
-    public string currentIdentity = "not set yet";
-    public GameObject infoscreen;
-    List<int> inputList = new List<int>();
+    public InputField text_Input;
+    public InputField text_Output;
+    public InputField inputField_recursiveSteps_In;
+    public InputField inputField_recursiveSteps_Out;
+    [HideInInspector]    
+    public string input_TextString;
+    public Toggle toggle_Verbose;
+    List<int> input_List = new List<int>();
 
     private void Start()
     {
-        textInput.text = "";
-        inputField_recursiveSteps.text = "8";
+        text_Input.text = "";
+        inputField_recursiveSteps_Out.text = "8";
     }
 
     //called by button
@@ -28,7 +28,7 @@ public class MainCodeObj : MonoBehaviour
         //set limit to users
         int limit = 100;
 
-        text txt = inputField_recursiveSteps.text;
+        string txt = inputField_recursiveSteps_Out.text;
         //check recursive values
         int steps = int.Parse(txt);
 
@@ -40,9 +40,9 @@ public class MainCodeObj : MonoBehaviour
             return;
         }
 
-        textInput.text = "1,2";
+        text_Input.text = "1,2";
         CalculateFoldIdentity(false);
-        if (toggle_verbose.isOn)
+        if (toggle_Verbose.isOn)
         {
             addTextToOutput(" ");
         }
@@ -59,20 +59,20 @@ public class MainCodeObj : MonoBehaviour
         //generate text for start values, starts at two and 
         for (int i = 2; i < steps; i += 2)
         {
-            textInput.text += ",";
+            text_Input.text += ",";
 
             count += 1;
-            textInput.text += count.ToString() + ",";
+            text_Input.text += count.ToString() + ",";
 
             count += 1;
 
             Debug.Log("i: " + i + " steps: " + steps);
 
-            if (i < steps - 1) { textInput.text += count.ToString(); } else { textInput.text += count.ToString() + ","; }
+            if (i < steps - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
 
             CalculateFoldIdentity(false);
 
-            if (toggle_verbose.isOn) { addTextToOutput(" "); } else { addTextToOutput(",", false); }
+            if (toggle_Verbose.isOn) { addTextToOutput(" "); } else { addTextToOutput(",", false); }
         }
     }
 
@@ -86,35 +86,35 @@ public class MainCodeObj : MonoBehaviour
         }
 
         //get text first time
-        inputText = GetInputFieldText();
+        input_TextString = GetInputFieldText();
 
-        if (toggle_verbose.isOn)
+        if (toggle_Verbose.isOn)
         {
-            addTextToOutput("Sequence: {" + inputText + "}");
+            addTextToOutput("Sequence: {" + input_TextString + "}");
         }
 
-        string[] lines = inputText.Split(new string[] { "," }, StringSplitOptions.None);
+        string[] lines = input_TextString.Split(new string[] { "," }, StringSplitOptions.None);
 
         //emtpy list if items added previously
-        inputList.Clear();
+        input_List.Clear();
         //add input to List
         for (int i = 0; i < lines.Length; i++)
         {
-            inputList.Add(int.Parse(lines[i]));
+            input_List.Add(int.Parse(lines[i]));
         }
 
-        if (toggle_verbose.isOn)
+        if (toggle_Verbose.isOn)
         {
-            addTextToOutput("Burrito Matrix of n = " + inputList.Count);
+            addTextToOutput("Burrito Matrix of n = " + input_List.Count);
         }
 
-        List<int> tempInputList = new List<int>(inputList);
+        List<int> tempInputList = new List<int>(input_List);
         List<int> idNumber_list = new List<int>();
 
         //input number is member of first row
-        printOutListToOutput(inputList);
+        printOutListToOutput(input_List);
 
-        for (int i = 0; i < inputList.Count - 1; i++)
+        for (int i = 0; i < input_List.Count - 1; i++)
         {
             idNumber_list.Add(tempInputList[1]);
             //recursive
@@ -125,11 +125,11 @@ public class MainCodeObj : MonoBehaviour
         idNumber_list.Add(tempInputList[1]);
 
         //the identity Number
-        if (toggle_verbose.isOn)
+        if (toggle_Verbose.isOn)
         {
-            textOutput.text += "Identity Number: {";
+            text_Output.text += "Identity Number: {";
             printOutListToOutput(idNumber_list, false);
-            textOutput.text += "}\n";
+            text_Output.text += "}\n";
         }
 
         //the identity sum
@@ -148,7 +148,7 @@ public class MainCodeObj : MonoBehaviour
             }
         }
 
-        if (toggle_verbose.isOn)
+        if (toggle_Verbose.isOn)
         {
             //addTextToOutput("The sum of second column: " + sum);
             addTextToOutput("The abs sum of travel through second column: " + travelValue);
@@ -162,7 +162,7 @@ public class MainCodeObj : MonoBehaviour
 
     public void printOutListToOutput(List<int> pList, bool noLinebreak = true)
     {
-        if (!toggle_verbose.isOn)
+        if (!toggle_Verbose.isOn)
         {
             return;
         }
@@ -220,19 +220,19 @@ public class MainCodeObj : MonoBehaviour
         return returnList;
     }
 
-    public void copyToMemory() { GUIUtility.systemCopyBuffer = textOutput.text; }
-    private string GetInputFieldText() { return (textInput.text); }
+    public void copyToMemory() { GUIUtility.systemCopyBuffer = text_Output.text; }
+    private string GetInputFieldText() { return (text_Input.text); }
     private void addTextToOutput(string s, bool linebreak = true)
     {
         if (linebreak)
         {
 
-            textOutput.text += s + "\n";
+            text_Output.text += s + "\n";
         }
         else
         {
-            textOutput.text += s;
+            text_Output.text += s;
         }
     }
-    private void clearOutputText() { textOutput.text = ""; }
+    private void clearOutputText() { text_Output.text = ""; }
 }
