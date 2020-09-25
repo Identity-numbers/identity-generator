@@ -5,6 +5,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+<<<<<<< Updated upstream
+=======
+/*
+TODO: fix graphics registration point, not working now...
+TODO: validate input for "get folded identity"
+*/
+
+>>>>>>> Stashed changes
 public class MainCodeObj : MonoBehaviour
 {
     public InputField text_Input;
@@ -25,6 +33,7 @@ public class MainCodeObj : MonoBehaviour
     //called by button
     public void recursiveOutput()
     {
+<<<<<<< Updated upstream
         //set limit to users
         int limit = 100;
 
@@ -37,10 +46,54 @@ public class MainCodeObj : MonoBehaviour
         {
             //number doesn't check
             addTextToOutput("recursive number empty, uneven or larger than limit = " + limit);
+=======
+        clearOutputText();
+
+        //set limit to users
+        int limit = 100;
+
+        string txtIn = inputField_recursiveSteps_In.text;
+        string txtOut = inputField_recursiveSteps_Out.text;
+
+        //check recursive values
+        if (string.IsNullOrEmpty(txtIn) || string.IsNullOrEmpty(txtOut))
+        {
+            addTextToOutput("recursive number in field In or Out EMPTY");
             return;
         }
 
-        text_Input.text = "1,2";
+        int stepsIn = int.Parse(txtIn);
+        int stepsOut = int.Parse(txtOut);
+        
+        if (stepsIn % 2 != 0 || stepsOut % 2 != 0)
+        {
+            addTextToOutput("recursive number in field In or Out not EVEN");
+            return;
+        }
+        else if (stepsIn > stepsOut)
+        {
+            stepsOut = stepsIn;
+            inputField_recursiveSteps_Out.text = stepsOut.ToString();
+        }
+        else if (stepsIn > limit || stepsOut > limit)
+        {
+            addTextToOutput("recursive number In or Out larger than LIMIT = " + limit);
+>>>>>>> Stashed changes
+            return;
+        }
+
+        //add padding to this
+        string paddingString = "";
+        for (int k = 0; k < stepsIn; k++)
+        {
+            paddingString += (k + 1).ToString();
+            if (k < stepsIn - 1)
+            {
+                paddingString += ",";
+            }
+        }
+        text_Input.text = paddingString;
+
         CalculateFoldIdentity(false);
         if (toggle_Verbose.isOn)
         {
@@ -51,11 +104,15 @@ public class MainCodeObj : MonoBehaviour
             addTextToOutput(",", false);
         }
 
+<<<<<<< Updated upstream
         if (steps > 2)
         {
             //textInput.text += ",";
         }
         int count = 2;
+=======
+        int count = stepsIn;
+>>>>>>> Stashed changes
         //generate text for start values, starts at two and 
         for (int i = 2; i < steps; i += 2)
         {
@@ -66,9 +123,13 @@ public class MainCodeObj : MonoBehaviour
 
             count += 1;
 
+<<<<<<< Updated upstream
             Debug.Log("i: " + i + " steps: " + steps);
 
             if (i < steps - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
+=======
+            if (i < stepsOut - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
+>>>>>>> Stashed changes
 
             CalculateFoldIdentity(false);
 
@@ -150,12 +211,12 @@ public class MainCodeObj : MonoBehaviour
 
         if (toggle_Verbose.isOn)
         {
-            //addTextToOutput("The sum of second column: " + sum);
+            addTextToOutput("The sum of second column: " + sum);
             addTextToOutput("The abs sum of travel through second column: " + travelValue);
         }
         else
         {
-            //addTextToOutput(sum.ToString(), false);
+            addTextToOutput(sum.ToString(), false);
             addTextToOutput(travelValue.ToString(), false);
         }
     }
