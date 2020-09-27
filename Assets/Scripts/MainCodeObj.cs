@@ -6,14 +6,30 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /*
-TODO: fix graphics registration point, not working now...
 TODO: validate input for "get folded identity"
+TODO: Value imagedata toogle get working
+TODO: Add recursive functionality
+TODO: Add "use special seq"
+TODO: Get "copy to clipboard or save to file working"
 */
 
 public class MainCodeObj : MonoBehaviour
 {
+    //INPUT TEXTFIELD SEQUENCE ========================================
     public InputField text_Input;
+
+    //OUTPUT TEXTFIELD SEQUENCE ======================================
     public InputField text_Output;
+
+    //SINGLE
+    public Toggle toggle_VelocityMap_Image;
+    public Toggle toggle_Mma_ImageData;
+
+    //SINGLE RECURSIVE ===============================================
+    public InputField inputField_singlerecursive_column;
+    public InputField inputField_singlerecursive_loop;
+
+    //GROWING RECURSIVE ==============================================
     public InputField inputField_recursiveSteps_In;
     public InputField inputField_recursiveSteps_Out;
     [HideInInspector]
