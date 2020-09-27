@@ -35,6 +35,10 @@ http://www.linusjarbo.com/IdentityNumber/index.html
 - Copy to memory doesn't seem to work in webgl format? Does work in editor.
 
 # Feature Requests
+- add digit in first row to the identity number
+- remove last digit in the identity number
+- recursively fold a given length of sequence
+- recursively fold a growing burrito matrix wit a sequence of own choice
 - save text to file
 - add a strict recursive output so it can be used in mathematica(?)
 
