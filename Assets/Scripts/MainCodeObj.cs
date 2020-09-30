@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /*
-TODO: validate input for "get folded identity"
 TODO: Value imagedata toogle get working
 TODO: Add recursive functionality
 TODO: Add "use special seq"
@@ -223,8 +222,8 @@ public class MainCodeObj : MonoBehaviour
         }
         else
         {
-            addTextToOutput(sum.ToString(), false);
-            addTextToOutput(travelValue.ToString(), false);
+            //addTextToOutput(sum.ToString(), false);
+            //addTextToOutput(travelValue.ToString(), false);
         }
     }
 
@@ -232,7 +231,7 @@ public class MainCodeObj : MonoBehaviour
     {
         if (!toggle_Verbose.isOn)
         {
-            return;
+            //return;
         }
         string pString = "";
         for (int i = 0; i < pList.Count; i++)

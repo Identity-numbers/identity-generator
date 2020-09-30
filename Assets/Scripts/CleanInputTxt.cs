@@ -9,7 +9,6 @@ public class CleanInputTxt : MonoBehaviour
 {
 
     public InputField inTxtField;
-    public InputField outTxtField;
     public MainCodeObj mainCodeObj;
 
     //do this on value changed
