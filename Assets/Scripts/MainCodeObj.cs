@@ -11,30 +11,43 @@ TODO: Value imagedata toogle get working
 TODO: Add recursive functionality
 TODO: Add "use special seq"
 TODO: Get "copy to clipboard or save to file working"
+TODO: fix open close special seq window
 */
 
 public class MainCodeObj : MonoBehaviour
 {
     //INPUT TEXTFIELD SEQUENCE ========================================
     public InputField text_Input;
+    public CleanInputTxt cleanInputTxt;
 
-    //OUTPUT TEXTFIELD SEQUENCE ======================================
+    //OUTPUT TEXTFIELD SEQUENCE =======================================
     public InputField text_Output;
 
-    //SINGLE
+    //SINGLE  =========================================================
     public Toggle toggle_VelocityMap_Image;
     public Toggle toggle_Mma_ImageData;
 
-    //SINGLE RECURSIVE ===============================================
+    //SINGLE RECURSIVE ================================================
     public InputField inputField_singlerecursive_column;
     public InputField inputField_singlerecursive_loop;
+    public Toggle toggle_addFirstDigit_removelast;
 
-    //GROWING RECURSIVE ==============================================
+    //GROWING RECURSIVE ===============================================
     public InputField inputField_recursiveSteps_In;
     public InputField inputField_recursiveSteps_Out;
+
+    //SPECIAL SEQ SETTINGS  ===========================================
+
+    public InputField inputField_specialseq;
+    public GameObject GoSpecialseq;
+
+    //GLOBAL SETTINGS   ===============================================
+    public Toggle toggle_Verbose;
+
+    //                  ===============================================
+
     [HideInInspector]
     public string input_TextString;
-    public Toggle toggle_Verbose;
     List<int> input_List = new List<int>();
 
     private void Start()
@@ -127,13 +140,18 @@ public class MainCodeObj : MonoBehaviour
         }
     }
 
-    //called by button, and by recursive steps
+    //called by button, and by recursive steps button
     public void CalculateFoldIdentity(bool clearOutput = true)
     {
         //for recursive to bypass
         if (clearOutput)
         {
             clearOutputText();
+        }
+
+        if (cleanInputTxt.ValidateInputString() == false)
+        {
+            return;
         }
 
         //get text first time
@@ -267,8 +285,13 @@ public class MainCodeObj : MonoBehaviour
     }
 
     public void copyToMemory() { GUIUtility.systemCopyBuffer = text_Output.text; }
-    private string GetInputFieldText() { return (text_Input.text); }
-    private void addTextToOutput(string s, bool linebreak = true)
+    private string GetInputFieldText()
+    {
+        cleanInputTxt.CleanLastComma();
+        return (text_Input.text);
+    }
+
+    public void addTextToOutput(string s, bool linebreak = true)
     {
         if (linebreak)
         {
