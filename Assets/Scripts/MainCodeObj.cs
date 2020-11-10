@@ -11,6 +11,9 @@ TODO: Add recursive functionality
 TODO: Add "use special seq"
 TODO: Get "copy to clipboard or save to file working"
 TODO: fix open close special seq window
+
+
+https://github.com/kou-yeung/WebGLInput/releases
 */
 
 public class MainCodeObj : MonoBehaviour
@@ -52,17 +55,17 @@ public class MainCodeObj : MonoBehaviour
     private void Start()
     {
         text_Input.text = "1,2,3,4";
-        inputField_recursiveSteps_In.text = "2";
-        inputField_recursiveSteps_Out.text = "8";
+        inputField_recursiveSteps_In.text = "8";
+        inputField_recursiveSteps_Out.text = "200";
     }
 
-    //called by button
+    //called by button in Growing Recursive
     public void recursiveOutput()
     {
         clearOutputText();
 
         //set limit to users
-        int limit = 100;
+        int limit = 500;
 
         string txtIn = inputField_recursiveSteps_In.text;
         string txtOut = inputField_recursiveSteps_Out.text;
@@ -110,7 +113,8 @@ public class MainCodeObj : MonoBehaviour
         }
         text_Input.text = paddingString;
 
-        CalculateFoldIdentity(false);
+        CalculateFoldIdentity(false, stepsIn-2);
+
         if (toggle_Verbose.isOn)
         {
             addTextToOutput(" ");
@@ -124,23 +128,29 @@ public class MainCodeObj : MonoBehaviour
         //generate text for start values, starts at two and 
         for (int i = stepsIn; i < stepsOut; i += 2)
         {
-            text_Input.text += ",";
+            //if(i != count){
+                text_Input.text += ",";
+            //}
 
             count += 1;
             text_Input.text += count.ToString() + ",";
 
             count += 1;
 
-            if (i < stepsOut - 1) { text_Input.text += count.ToString(); } else { text_Input.text += count.ToString() + ","; }
+            if (i < stepsOut - 1 ) { 
+                text_Input.text += count.ToString(); 
+            } else { 
+                text_Input.text += count.ToString() + ","; 
+            }
 
-            CalculateFoldIdentity(false);
+            CalculateFoldIdentity(false, i);
 
             if (toggle_Verbose.isOn) { addTextToOutput(" "); } else { addTextToOutput(",", false); }
         }
     }
 
     //called by button, and by recursive steps button
-    public void CalculateFoldIdentity(bool clearOutput = true)
+    public void CalculateFoldIdentity(bool clearOutput = true, int atCount = -1)
     {
         //for recursive to bypass
         if (clearOutput)
@@ -179,15 +189,21 @@ public class MainCodeObj : MonoBehaviour
         List<int> tempInputList = new List<int>(input_List);
         List<int> idNumber_list = new List<int>();
 
-        //input number is member of first row
-        printOutListToOutput(input_List);
+        if (toggle_Verbose.isOn)
+        {
+            //input number is member of first row
+            printOutListToOutput(input_List);
+        }
 
         for (int i = 0; i < input_List.Count - 1; i++)
         {
             idNumber_list.Add(tempInputList[1]);
             //recursive
             tempInputList = FoldListSequence(tempInputList);
-            printOutListToOutput(tempInputList);
+            if (toggle_Verbose.isOn)
+            {
+                printOutListToOutput(tempInputList);
+            }
         }
         idNumber_list.Add(tempInputList[1]);
 
@@ -217,13 +233,20 @@ public class MainCodeObj : MonoBehaviour
 
         if (toggle_Verbose.isOn)
         {
-            addTextToOutput("The sum of second column: " + sum);
+            //addTextToOutput("The sum of second column: " + sum);
             addTextToOutput("The abs sum of travel through second column: " + travelValue);
+            if(atCount != -1){
+                addTextToOutput("Wadsworth calculation at count (" + (atCount+2) + "/" + travelValue + "),(atIndex/absSumTravel): " + (1.0 * (atCount+2))/(1.0 * travelValue));
+                addTextToOutput("Normalized 1/(" + (atCount+2) + "/" + travelValue + "): " + 1/((1.0 * (atCount+2))/(1.0 * travelValue)));
+            }
         }
         else
         {
             //addTextToOutput(sum.ToString(), false);
             //addTextToOutput(travelValue.ToString(), false);
+            if(atCount != -1){
+                addTextToOutput(((1.0 * (atCount+2))/(1.0 * travelValue)).ToString());
+            }
         }
     }
 
